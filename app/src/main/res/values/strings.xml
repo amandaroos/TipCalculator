@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Tip Calculator</string>
+
+    <string name="zero_currency">$0.00</string>
+
+    <!--Labels-->
+    <string name="label_bill">Bill</string>
+    <string name="label_tip_percentage">Tip %</string>
+    <string name="label_tip_total">Tip Total</string>
+    <string name="label_split">Split</string>
+    <string name="label_total">Total</string>
+    <string name="label_total_per_person">Per Person</string>
+    <string name="label_round_total">Round Total</string>
+
+    <!--Button Labels-->
+    <string name="button_round_down">Down</string>
+    <string name="button_round_up">Up</string>
+    <string name="button_increase">+</string>
+    <string name="button_decrease">-</string>
+
+
+</resources>
