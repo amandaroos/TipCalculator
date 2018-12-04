@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,6 +23,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/bill"
                     android:text="@string/label_bill"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -48,11 +48,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/tip_percent"
                     android:text="@string/label_tip_percentage"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <Button
-                    android:id="@+id/decrease_tip_percent"
+                    android:id="@+id/button_decrease_tip_percent"
                     android:layout_width="40dp"
                     android:layout_height="44dp"
                     android:text="@string/button_decrease"
@@ -65,10 +66,10 @@
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:minWidth="48dp"
-                    android:text="15%" />
+                    android:text="@string/default_percent" />
 
                 <Button
-                    android:id="@+id/increase_tip_percent"
+                    android:id="@+id/button_increase_tip_percent"
                     android:layout_width="40dp"
                     android:layout_height="44dp"
                     android:text="@string/button_increase"
@@ -82,6 +83,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/tip_total"
                     android:text="@string/label_tip_total"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -142,11 +144,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/split"
                     android:text="@string/label_split"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <Button
-                    android:id="@+id/decrease_split"
+                    android:id="@+id/button_decrease_split"
                     android:layout_width="40dp"
                     android:layout_height="44dp"
                     android:gravity="center"
@@ -161,10 +164,10 @@
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:minWidth="48dp"
-                    android:text="1" />
+                    android:text="@string/default_split" />
 
                 <Button
-                    android:id="@+id/increase_split"
+                    android:id="@+id/button_increase_split"
                     android:layout_width="40dp"
                     android:layout_height="44dp"
                     android:text="@string/button_increase"
@@ -177,6 +180,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/total"
                     android:text="@string/label_total"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -200,8 +204,10 @@
             <TableRow>
 
                 <TextView
+                    android:id="@+id/label_per_person"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/total_per_person"
                     android:paddingTop="16dp"
                     android:text="@string/label_total_per_person"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />

@@ -1,11 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Tip Calculator</string>
-
-    <string name="zero_currency" translatable="false">0</string>
-    <string name="default_percent" translatable="false">15%</string>
-    <string name="default_split" translatable="false">1</string>
-
-    <!--Labels-->
+    <string name="app_name">French - Tip Calculator</string>
+    <string name="zero_currency">$0.00</string>
     <string name="label_bill">Bill</string>
     <string name="label_tip_percentage">Tip %</string>
     <string name="label_tip_total">Tip Total</string>
@@ -13,15 +9,7 @@
     <string name="label_total">Total</string>
     <string name="label_total_per_person">Per Person</string>
     <string name="label_round_total">Round Total</string>
-
-    <!--Button Labels-->
     <string name="button_round_down">Down</string>
     <string name="button_round_up">Up</string>
-    <string name="button_increase" translatable="false">+</string>
-    <string name="button_decrease" translatable="false">-</string>
-
-    <!-- Toast message when user enters a number that is too large [CHAR LIMIT=30] -->
     <string name="large_number_error_toast">Error: number is too large</string>
-
-
 </resources>
