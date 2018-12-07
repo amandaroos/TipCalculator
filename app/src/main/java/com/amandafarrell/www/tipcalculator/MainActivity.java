@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private String mTotalString;
 
     private TextView mPerPersonTextView;
+    private TextView mPerPersonLabel;
     private Integer mPerPerson;
     private String mPerPersonString;
 
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mSplitButtonDecrease = (Button) findViewById(R.id.button_decrease_split);
         mSplitButtonIncrease = (Button) findViewById(R.id.button_increase_split);
         mTotalTextView = (TextView) findViewById(R.id.total);
+        mPerPersonLabel = (TextView) findViewById(R.id.label_per_person);
         mPerPersonTextView = (TextView) findViewById(R.id.total_per_person);
 
         //Initialize variables
@@ -279,11 +281,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setPerPersonTextView() {
 
-        calculatePerPersonTotal();
+        if (mSplit > 1) {
+            calculatePerPersonTotal();
 
-        NumberFormat format = NumberFormat.getCurrencyInstance();
-        mPerPersonString = format.format(mPerPerson / 100.0);
-        mPerPersonTextView.setText(mPerPersonString);
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            mPerPersonString = format.format(mPerPerson / 100.0);
+            mPerPersonTextView.setText(mPerPersonString);
+
+            mPerPersonLabel.setVisibility(View.VISIBLE);
+            mPerPersonTextView.setVisibility(View.VISIBLE);
+        } else {
+            mPerPersonLabel.setVisibility(View.GONE);
+            mPerPersonTextView.setVisibility(View.GONE);
+        }
     }
 
     /**
