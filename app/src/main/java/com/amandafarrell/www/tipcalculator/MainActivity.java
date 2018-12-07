@@ -16,12 +16,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Boolean mIgnoreNextTextChange = false;
 
-    public static final Integer DEFAULT_TIP_PERCENT = 15;
-
     private EditText mBillEditText;
     private Integer mBill;
     private String mBillString;
 
+    private Integer mDefaultTipPercent = 15;
     private TextView mTipPercentTextView;
     private Integer mTipPercent;
     private String mTipPercentString;
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize variables
         mBill = 0;
-        mTipPercent = DEFAULT_TIP_PERCENT;
+        mTipPercent = mDefaultTipPercent;
         mTipTotal = 0;
         mSplit = 1;
         mTotal = 0;
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         mSplitButtonDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
+            setTipTotalEditText();
+            setTotalTextView();
+            setPerPersonTextView();
         }
     };
 
