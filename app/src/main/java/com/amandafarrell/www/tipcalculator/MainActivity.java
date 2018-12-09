@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Integer mBill;
     private String mBillString;
 
-    private Integer mDefaultTipPercent = 15;
+    private Integer mDefaultTipPercent = 10;
     private TextView mTipPercentTextView;
     private Integer mTipPercent;
     private String mTipPercentString;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         mBill = 0;
         mTipPercent = mDefaultTipPercent;
         mTipTotal = 0;
-        mSplit = 1;
+        mSplit = 2;
         mTotal = 0;
 
         //Set on click listeners
@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBillEditText.setFocusable(true);
         setBillEditText();
+        setTipPercentageTextView();
         setTipTotalEditText();
         setSplitEditText();
         setTotalTextView();
@@ -178,8 +179,8 @@ public class MainActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
             if (mBillEditText.hasFocus()){
                 calculateTipTotal();
-                calculateTotal();
                 setTipTotalEditText();
+                calculateTotal();
                 setTotalTextView();
                 setPerPersonTextView();
             }
@@ -216,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
     private TextWatcher tipTotalTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
@@ -252,16 +252,17 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     mTipTotalEditText.setSelection(mTipTotalEditText.getText().length());
                 }
+
+                calculateTipPercentage();
+                setTipPercentageTextView();
+                calculateTotal();
+                setTotalTextView();
+                setPerPersonTextView();
             }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-//            calculateTipPercentage();
-//            setTipPercentageTextView();
-            calculateTotal();
-            setTotalTextView();
-            setPerPersonTextView();
         }
     };
 
