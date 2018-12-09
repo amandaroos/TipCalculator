@@ -17,12 +17,13 @@ import java.text.NumberFormat;
 public class MainActivity extends AppCompatActivity {
 
     private Boolean mIgnoreNextTextChange = false;
+    private Boolean mRoundingChange = false;
 
     private EditText mBillEditText;
     private Integer mBill;
     private String mBillString;
 
-    private Integer mDefaultTipPercent = 10;
+    private Integer mDefaultTipPercent = 15;
     private TextView mTipPercentTextView;
     private Integer mTipPercent;
     private String mTipPercentString;
@@ -82,14 +83,18 @@ public class MainActivity extends AppCompatActivity {
         mBill = 0;
         mTipPercent = mDefaultTipPercent;
         mTipTotal = 0;
-        mSplit = 2;
+        mSplit = 1;
         mTotal = 0;
+        mPerPerson = 0;
         mRemainder = 0;
 
         //Set on click listeners
         mTipPercentButtonDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                mTipTotalEditText.clearFocus();
+
                 if (mTipPercent > 0) {
                     mTipPercent -= 1;
                     setTipPercentageTextView();
@@ -100,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
         mTipPercentButtonIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                mTipTotalEditText.clearFocus();
+
                 if (mTipPercent < 100) {
                     mTipPercent += 1;
                     setTipPercentageTextView();
@@ -110,7 +118,17 @@ public class MainActivity extends AppCompatActivity {
         mRoundTotalDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mTipTotal -= 1;
+                double total = mTotal / 100.0;
+                double rounded = Math.floor(mTotal / 100.0);
+                double doubleRoundDifference = Math.round(total * 100.0 - rounded * 100.0);
+                int roundingDifference = (int) doubleRoundDifference;
+                mTipTotal -= roundingDifference;
+
+                //Set mRoundingChange to true so the change won't trigger the tipPercentTextWatcher
+                mRoundingChange = true;
+                calculateTipPercentage();
+                setTipPercentageTextView();
+
                 calculateTotal();
                 setTipTotalEditText();
                 setTotalTextView();
@@ -122,7 +140,17 @@ public class MainActivity extends AppCompatActivity {
         mRoundTotalIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mTipTotal += 1;
+                double total = mTotal / 100.0;
+                double rounded = Math.ceil(mTotal / 100.0);
+                double doubleRoundDifference = Math.round(total * 100.0 - rounded * 100.0);
+                int roundingDifference = (int) doubleRoundDifference;
+                mTipTotal -= roundingDifference;
+
+                //Set mRoundingChange to true so the change won't trigger the tipPercentTextWatcher
+                mRoundingChange = true;
+                calculateTipPercentage();
+                setTipPercentageTextView();
+
                 calculateTotal();
                 setTipTotalEditText();
                 setTotalTextView();
@@ -242,13 +270,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if (!mTipTotalEditText.hasFocus()) {
-                calculateTipTotal();
-                calculateTotal();
-                setTipTotalEditText();
-                setTotalTextView();
-                setPerPersonTextView();
-                setRemainderTextView();
+            if (mRoundingChange) {
+                mRoundingChange = false;
+                return;
+            } else {
+                if (!mTipTotalEditText.hasFocus()) {
+                    calculateTipTotal();
+                    calculateTotal();
+                    setTipTotalEditText();
+                    setTotalTextView();
+                    setPerPersonTextView();
+                    setRemainderTextView();
+                }
             }
         }
     };
@@ -481,6 +514,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Menu function
     private void resetTipPercent() {
+        mTipTotalEditText.clearFocus();
         mTipPercent = mDefaultTipPercent;
         setTipPercentageTextView();
     }

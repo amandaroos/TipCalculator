@@ -6,6 +6,7 @@
     <string name="default_split" translatable="false">1</string>
     
     <!--Menu Items-->
+    <string name="action_set_default_percent" translatable="true">Set Default Tip %</string>
     <string name="action_reset_tip_percent" translatable="true">Reset Tip %</string>
 
     <!--Labels-->
