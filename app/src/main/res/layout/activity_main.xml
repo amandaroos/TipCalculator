@@ -40,6 +40,8 @@
                     android:inputType="number"
                     android:minWidth="48dp"
                     android:text="@string/zero_currency" />
+
+                <requestFocus />
             </TableRow>
 
             <!--Tip Percent-->
@@ -62,11 +64,11 @@
                 <TextView
                     android:id="@+id/tip_percent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:textSize="20sp"
                     android:minWidth="14dp"
-                    android:text="@string/default_percent" />
+                    android:text="@string/default_percent"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
 
                 <Button
                     android:id="@+id/button_increase_tip_percent"

@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         mTipTotalEditText.setSelectAllOnFocus(true);
         mSplitEditText.setSelectAllOnFocus(true);
 
+        mBillEditText.setFocusable(true);
         setBillEditText();
         setTipTotalEditText();
         setSplitEditText();
@@ -251,8 +252,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     mTipTotalEditText.setSelection(mTipTotalEditText.getText().length());
                 }
-
-
             }
         }
 
@@ -260,6 +259,9 @@ public class MainActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
 //            calculateTipPercentage();
 //            setTipPercentageTextView();
+            calculateTotal();
+            setTotalTextView();
+            setPerPersonTextView();
         }
     };
 
