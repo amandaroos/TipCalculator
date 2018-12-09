@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -113,17 +115,24 @@ public class MainActivity extends AppCompatActivity {
         //Set text watchers
         mBillEditText.addTextChangedListener(billTextWatcher);
         mTipPercentTextView.addTextChangedListener(tipPercentTextWatcher);
+        mTipTotalEditText.addTextChangedListener(tipTotalTextWatcher);
         mSplitEditText.addTextChangedListener(splitTextWatcher);
 
         //Select all text when selected for each EditText
         mBillEditText.setSelectAllOnFocus(true);
-        mTipPercentTextView.setSelectAllOnFocus(true);
         mTipTotalEditText.setSelectAllOnFocus(true);
         mSplitEditText.setSelectAllOnFocus(true);
 
         setBillEditText();
+        setTipTotalEditText();
+        setSplitEditText();
+        setTotalTextView();
+        setPerPersonTextView();
     }
 
+    /**
+     * billTextWatcher
+     */
     private TextWatcher billTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -166,13 +175,44 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            setTipTotalEditText();
-            setTotalTextView();
-            setPerPersonTextView();
+            if (mBillEditText.hasFocus()){
+                calculateTipTotal();
+                calculateTotal();
+                setTipTotalEditText();
+                setTotalTextView();
+                setPerPersonTextView();
+            }
         }
     };
 
+    /**
+     * tipPercentTextWatcher
+     */
     private TextWatcher tipPercentTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (!mTipTotalEditText.hasFocus()){
+                calculateTipTotal();
+                calculateTotal();
+                setTipTotalEditText();
+                setTotalTextView();
+                setPerPersonTextView();
+            }
+        }
+    };
+
+    /**
+     * tipTotalTextWatcher
+     */
+    private TextWatcher tipTotalTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -180,29 +220,52 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (mIgnoreNextTextChange) {
-                mIgnoreNextTextChange = false;
-                return;
-            } else {
-                mIgnoreNextTextChange = true;
+            if (mTipTotalEditText.hasFocus()){
+                if (mIgnoreNextTextChange) {
+                    mIgnoreNextTextChange = false;
+                    return;
+                } else {
+                    mIgnoreNextTextChange = true;
+                }
+
+                try {
+                    String tipTotalEditTextContent = mTipTotalEditText.getText().toString();
+                    String replaceable = String.format("[%s,.\\s]", NumberFormat.getCurrencyInstance().getCurrency().getSymbol());
+                    tipTotalEditTextContent = tipTotalEditTextContent.replaceAll(replaceable, "");
+
+                    if (tipTotalEditTextContent.isEmpty()) {
+                        mTipTotal = 0;
+                    } else {
+                        mTipTotal = Integer.parseInt(tipTotalEditTextContent);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), R.string.large_number_error_toast, Toast.LENGTH_LONG).show();
+
+                    mTipTotal = 0;
+                }
+
+                setTipTotalEditText();
+                if (mTipTotalString.substring(mTipTotalString.length() - 1)
+                        .equals(NumberFormat.getCurrencyInstance().getCurrency().getSymbol())) {
+                    mTipTotalEditText.setSelection(mTipTotalEditText.getText().length() - 2);
+                } else {
+                    mTipTotalEditText.setSelection(mTipTotalEditText.getText().length());
+                }
+
+
             }
-
-            String tipPercentEditTextContent = mTipPercentTextView.getText().toString();
-            tipPercentEditTextContent = tipPercentEditTextContent.replaceAll("%", "");
-
-            mTipPercent = Integer.parseInt(tipPercentEditTextContent);
-
-            setTipPercentageTextView();
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-            setTipTotalEditText();
-            setTotalTextView();
-            setPerPersonTextView();
+//            calculateTipPercentage();
+//            setTipPercentageTextView();
         }
     };
 
+    /**
+     * splitTextWatcher
+     */
     private TextWatcher splitTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -237,6 +300,8 @@ public class MainActivity extends AppCompatActivity {
         mBillEditText.setText(mBillString);
     }
 
+    //EditText setting
+
     /**
      * Set mTipPercentageEditText to current value of mTipPercent
      */
@@ -246,11 +311,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Set mTipTotalEditText to calculated value of mTipTotal
+     * Set mTipTotalEditText to current value of mTipTotal
      */
     private void setTipTotalEditText() {
-
-        calculateTipTotal();
 
         NumberFormat format = NumberFormat.getCurrencyInstance();
         mTipTotalString = format.format(mTipTotal / 100.0);
@@ -265,11 +328,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Set mTotalTextView to calculated value of mTotal
+     * Set mTotalTextView to current value of mTotal
      */
     private void setTotalTextView() {
-
-        calculateTotal();
 
         NumberFormat format = NumberFormat.getCurrencyInstance();
         mTotalString = format.format(mTotal / 100.0);
@@ -277,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Set mTotalEditText to calculated value of mTotal
+     * Set mPerPersonTextView to calculated value of mPerPerson
      */
     private void setPerPersonTextView() {
 
@@ -293,6 +354,19 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mPerPersonLabel.setVisibility(View.GONE);
             mPerPersonTextView.setVisibility(View.GONE);
+        }
+    }
+
+    //Calculations
+
+    /**
+     * Calculate tip percentage based on TipTotal
+     */
+    private void calculateTipPercentage() {
+        if (mBill == 0){
+            mTipPercent = mDefaultTipPercent;
+        } else {
+            mTipPercent = (int) (mTipTotal *1.0 / mBill * 100);
         }
     }
 
@@ -315,5 +389,27 @@ public class MainActivity extends AppCompatActivity {
      */
     private void calculatePerPersonTotal() {
         mPerPerson = mTotal / mSplit;
+    }
+
+    //Menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_reset_tip_percent:
+                resetTipPercent();
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void resetTipPercent(){
+        mTipPercent = mDefaultTipPercent;
+        setTipPercentageTextView();
     }
 }

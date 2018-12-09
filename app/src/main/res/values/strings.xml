@@ -4,6 +4,9 @@
     <string name="zero_currency" translatable="false">0</string>
     <string name="default_percent" translatable="false">15%</string>
     <string name="default_split" translatable="false">1</string>
+    
+    <!--Menu Items-->
+    <string name="action_reset_tip_percent" translatable="true">Reset Tip %</string>
 
     <!--Labels-->
     <string name="label_bill">Bill</string>
