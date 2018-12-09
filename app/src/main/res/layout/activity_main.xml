@@ -230,6 +230,33 @@
                     android:textStyle="bold" />
             </TableRow>
 
+            <!--Remainder-->
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/label_remainder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/remainder"
+                    android:paddingTop="16dp"
+                    android:text="@string/label_remainder"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <Button
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/remainder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minWidth="56dp"
+                    android:text="@string/zero_currency"
+                    android:textAppearance="?android:textAppearanceLarge" />
+            </TableRow>
+
         </TableLayout>
 
     </ScrollView>

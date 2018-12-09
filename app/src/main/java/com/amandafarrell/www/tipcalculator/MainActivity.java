@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private Integer mTipTotal;
     private String mTipTotalString;
 
+    private Button mRoundTotalDecrease;
+    private Button mRoundTotalIncrease;
+
     private EditText mSplitEditText;
     private Integer mSplit;
     private Button mSplitButtonDecrease;
@@ -47,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private Integer mPerPerson;
     private String mPerPersonString;
 
+    private TextView mRemainderTextView;
+    private TextView mRemainderLabel;
+    private Integer mRemainder;
+    private String mRemainderString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +67,16 @@ public class MainActivity extends AppCompatActivity {
         mTipPercentButtonDecrease = (Button) findViewById(R.id.button_decrease_tip_percent);
         mTipPercentButtonIncrease = (Button) findViewById(R.id.button_increase_tip_percent);
         mTipTotalEditText = (EditText) findViewById(R.id.tip_total);
+        mRoundTotalDecrease = (Button) findViewById(R.id.button_round_down);
+        mRoundTotalIncrease = (Button) findViewById(R.id.button_round_up);
         mSplitEditText = (EditText) findViewById(R.id.split);
         mSplitButtonDecrease = (Button) findViewById(R.id.button_decrease_split);
         mSplitButtonIncrease = (Button) findViewById(R.id.button_increase_split);
         mTotalTextView = (TextView) findViewById(R.id.total);
         mPerPersonLabel = (TextView) findViewById(R.id.label_per_person);
         mPerPersonTextView = (TextView) findViewById(R.id.total_per_person);
+        mRemainderLabel = (TextView) findViewById(R.id.label_remainder);
+        mRemainderTextView = (TextView) findViewById(R.id.remainder);
 
         //Initialize variables
         mBill = 0;
@@ -72,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         mTipTotal = 0;
         mSplit = 2;
         mTotal = 0;
+        mRemainder = 0;
 
         //Set on click listeners
         mTipPercentButtonDecrease.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +104,30 @@ public class MainActivity extends AppCompatActivity {
                     mTipPercent += 1;
                     setTipPercentageTextView();
                 }
+            }
+        });
+
+        mRoundTotalDecrease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTipTotal -= 1;
+                calculateTotal();
+                setTipTotalEditText();
+                setTotalTextView();
+                setPerPersonTextView();
+                setRemainderTextView();
+            }
+        });
+
+        mRoundTotalIncrease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTipTotal += 1;
+                calculateTotal();
+                setTipTotalEditText();
+                setTotalTextView();
+                setPerPersonTextView();
+                setRemainderTextView();
             }
         });
 
@@ -130,7 +167,10 @@ public class MainActivity extends AppCompatActivity {
         setSplitEditText();
         setTotalTextView();
         setPerPersonTextView();
+        setRemainderTextView();
     }
+
+    //TextWatchers
 
     /**
      * billTextWatcher
@@ -177,12 +217,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if (mBillEditText.hasFocus()){
+            if (mBillEditText.hasFocus()) {
                 calculateTipTotal();
                 setTipTotalEditText();
                 calculateTotal();
                 setTotalTextView();
                 setPerPersonTextView();
+                setRemainderTextView();
             }
         }
     };
@@ -201,12 +242,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if (!mTipTotalEditText.hasFocus()){
+            if (!mTipTotalEditText.hasFocus()) {
                 calculateTipTotal();
                 calculateTotal();
                 setTipTotalEditText();
                 setTotalTextView();
                 setPerPersonTextView();
+                setRemainderTextView();
             }
         }
     };
@@ -221,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (mTipTotalEditText.hasFocus()){
+            if (mTipTotalEditText.hasFocus()) {
                 if (mIgnoreNextTextChange) {
                     mIgnoreNextTextChange = false;
                     return;
@@ -258,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
                 calculateTotal();
                 setTotalTextView();
                 setPerPersonTextView();
+                setRemainderTextView();
             }
         }
 
@@ -291,8 +334,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {
             setPerPersonTextView();
+            setRemainderTextView();
         }
     };
+
+    //EditText setting
 
     /**
      * Set mBillEditText to current value of mBill
@@ -302,8 +348,6 @@ public class MainActivity extends AppCompatActivity {
         mBillString = format.format(mBill / 100.0);
         mBillEditText.setText(mBillString);
     }
-
-    //EditText setting
 
     /**
      * Set mTipPercentageEditText to current value of mTipPercent
@@ -360,16 +404,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set mRemainderTextView to calculated value of mRemainder
+     */
+    private void setRemainderTextView() {
+
+        calculateRemainder();
+
+        if (mRemainder > 0 && mSplit > 1) {
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            mRemainderString = format.format(mRemainder / 100.0);
+            mRemainderTextView.setText(mRemainderString);
+
+            mRemainderLabel.setVisibility(View.VISIBLE);
+            mRemainderTextView.setVisibility(View.VISIBLE);
+        } else {
+            mRemainderLabel.setVisibility(View.GONE);
+            mRemainderTextView.setVisibility(View.GONE);
+        }
+    }
+
     //Calculations
 
     /**
      * Calculate tip percentage based on TipTotal
      */
     private void calculateTipPercentage() {
-        if (mBill == 0){
+        if (mBill == 0) {
             mTipPercent = mDefaultTipPercent;
         } else {
-            mTipPercent = (int) (mTipTotal *1.0 / mBill * 100);
+            mTipPercent = (int) (mTipTotal * 1.0 / mBill * 100);
         }
     }
 
@@ -394,6 +458,10 @@ public class MainActivity extends AppCompatActivity {
         mPerPerson = mTotal / mSplit;
     }
 
+    private void calculateRemainder() {
+        mRemainder = mTotal - mPerPerson * mSplit;
+    }
+
     //Menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -403,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_reset_tip_percent:
                 resetTipPercent();
         }
@@ -411,7 +479,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void resetTipPercent(){
+    //Menu function
+    private void resetTipPercent() {
         mTipPercent = mDefaultTipPercent;
         setTipPercentageTextView();
     }

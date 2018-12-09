@@ -5,5 +5,4 @@
         android:id="@+id/action_reset_tip_percent"
         android:title="@string/action_reset_tip_percent"
         app:showAsAction="never"/>
-
 </menu>
