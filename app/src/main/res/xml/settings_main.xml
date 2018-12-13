@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.v7.preference.EditTextPreference
+        android:defaultValue="@string/default_percent"
+        android:inputType="number"
+        android:key="@string/settings_tip_percent_key"
+        android:title="@string/settings_tip_percent_label"/>
+
+</PreferenceScreen>

@@ -1,5 +1,6 @@
 package com.amandafarrell.www.tipcalculator;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -505,6 +506,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+//            case R.id.action_set_default_percent:
+//                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+//                startActivity(settingsIntent);
             case R.id.action_reset_tip_percent:
                 resetTipPercent();
         }
