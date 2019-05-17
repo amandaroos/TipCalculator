@@ -273,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
             if (mRoundingChange) {
                 mRoundingChange = false;
-                return;
             } else {
                 if (!mTipTotalEditText.hasFocus()) {
                     calculateTipTotal();
@@ -511,6 +510,9 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(settingsIntent);
             case R.id.action_reset_tip_percent:
                 resetTipPercent();
+            case R.id.action_donate:
+                Intent intent = new Intent(MainActivity.this, DonateActivity.class);
+                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
 

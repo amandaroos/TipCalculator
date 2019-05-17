@@ -9,4 +9,10 @@
         android:id="@+id/action_reset_tip_percent"
         android:title="@string/action_reset_tip_percent"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_donate"
+        android:title="@string/action_donate"
+        android:icon="@drawable/icon_donate"
+        app:showAsAction="ifRoom" />
 </menu>
